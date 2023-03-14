@@ -1,0 +1,120 @@
+[gd_scene load_steps=13 format=3 uid="uid://7f1k0tsx7cnx"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_ci0lx"]
+[ext_resource type="PackedScene" uid="uid://1wnfmblulhx0" path="res://scenes/player.tscn" id="1_lp7mr"]
+[ext_resource type="PackedScene" uid="uid://cyg1avbtmwoj7" path="res://scenes/hud.tscn" id="2_g7hwg"]
+[ext_resource type="PackedScene" uid="uid://bh1r82178c2u1" path="res://scenes/asteroid.tscn" id="3_6btt6"]
+[ext_resource type="PackedScene" uid="uid://dwwjje64opjab" path="res://scenes/game_over_screen.tscn" id="3_km7re"]
+[ext_resource type="PackedScene" uid="uid://bxpqhkwbma8la" path="res://scenes/player_spawn_area.tscn" id="6_kp4kv"]
+[ext_resource type="AudioStream" uid="uid://d3r58unnfcojo" path="res://assets/audio/sfx_laser1.wav" id="7_ymdea"]
+[ext_resource type="AudioStream" uid="uid://yu1ff4h0rwa2" path="res://assets/audio/hit.wav" id="8_p30em"]
+[ext_resource type="AudioStream" uid="uid://ddiy12b6ukf4n" path="res://assets/audio/explode.wav" id="9_x64l8"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6ya6y"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 360, 1)
+particle_flag_disable_z = true
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -10.0
+initial_velocity_max = -10.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qn0gc"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 360, 1)
+particle_flag_disable_z = true
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -20.0
+initial_velocity_max = -20.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 3.0
+scale_max = 3.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ws6fu"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 360, 1)
+particle_flag_disable_z = true
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -30.0
+initial_velocity_max = -30.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 5.0
+scale_max = 5.0
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_ci0lx")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="UI" instance=ExtResource("2_g7hwg")]
+
+[node name="GameOverScreen" parent="UI" instance=ExtResource("3_km7re")]
+visible = false
+
+[node name="BackgroundStarFields" type="Node2D" parent="."]
+
+[node name="StarFieldBack" type="GPUParticles2D" parent="BackgroundStarFields"]
+z_index = -100
+position = Vector2(1308, 360)
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_6ya6y")
+lifetime = 140.0
+preprocess = 280.0
+
+[node name="StarFieldMiddle" type="GPUParticles2D" parent="BackgroundStarFields"]
+z_index = -95
+position = Vector2(1308, 360)
+amount = 250
+process_material = SubResource("ParticleProcessMaterial_qn0gc")
+lifetime = 140.0
+preprocess = 280.0
+
+[node name="StarFieldFront" type="GPUParticles2D" parent="BackgroundStarFields"]
+z_index = -90
+position = Vector2(1308, 360)
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_ws6fu")
+lifetime = 140.0
+preprocess = 280.0
+
+[node name="Lasers" type="Node" parent="."]
+
+[node name="Asteroids" type="Node" parent="."]
+
+[node name="Asteroid" parent="Asteroids" instance=ExtResource("3_6btt6")]
+position = Vector2(396, 244)
+
+[node name="Asteroid2" parent="Asteroids" instance=ExtResource("3_6btt6")]
+position = Vector2(987, 111)
+
+[node name="Asteroid3" parent="Asteroids" instance=ExtResource("3_6btt6")]
+position = Vector2(1033, 445)
+
+[node name="Asteroid4" parent="Asteroids" instance=ExtResource("3_6btt6")]
+position = Vector2(263, 615)
+
+[node name="Asteroid5" parent="Asteroids" instance=ExtResource("3_6btt6")]
+position = Vector2(143, 107)
+
+[node name="PlayerSpawnPos" type="Node2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="PlayerSpawnArea" parent="PlayerSpawnPos" instance=ExtResource("6_kp4kv")]
+
+[node name="LaserSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_ymdea")
+
+[node name="AsteroidHitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_p30em")
+
+[node name="PlayerDieSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_x64l8")
+
+[node name="Player" parent="." instance=ExtResource("1_lp7mr")]
+position = Vector2(640, 361)
